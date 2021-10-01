@@ -1,0 +1,10 @@
+#ifndef STATUS_CODE_H
+#define STATUS_CODE_H
+
+enum STATUS_CODE {
+	SUCCESS = 0,
+	NO_MORE_MEMORY = 1,
+	NULL_POINTER_ERROR = 2
+};
+
+#endif
