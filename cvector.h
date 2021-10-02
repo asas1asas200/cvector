@@ -41,3 +41,7 @@ ssize_t push_back(struct Vector* self, void* element) {
 		self->array[self->size++] = element;
 }
 
+void* at(struct Vector* self, size_t idx) {
+	return self->array[idx];
+}
+
