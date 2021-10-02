@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "status_code.h"
 
 struct Vector{
@@ -45,6 +46,10 @@ ssize_t push_back(struct Vector* self, void* element) {
 }
 
 void* at(struct Vector* self, size_t idx) {
+	if(idx>=self->size) {
+		fprintf(stderr, "Index out of bounds.\n");
+		abort();
+	}
 	return self->array[idx];
 }
 
