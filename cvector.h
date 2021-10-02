@@ -43,6 +43,11 @@ ssize_t push_back(struct Vector* self, void* element) {
 	self->array[self->size++] = element;
 }
 
+ssize_t pop_back(struct Vector* self) {
+	free(self->array[--self->size]);
+	return SUCCESS;
+}
+
 void* at(struct Vector* self, size_t idx) {
 	if(idx>=self->size) {
 		fprintf(stderr, "Index out of bounds.\n");
@@ -55,6 +60,7 @@ void init_vector(struct Vector** v) {
 	*v = malloc(sizeof(struct Vector));
 	(*v)->reserve = reserve;
 	(*v)->push_back = push_back;
+	(*v)->pop_back = pop_back;
 	(*v)->at = at;
 	(*v)->size = 0;
 	(*v)->reserve(*v, 2);
