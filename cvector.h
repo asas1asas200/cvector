@@ -32,3 +32,12 @@ ssize_t reserve(struct Vector* self, size_t new_capacity) {
 	free(self->array);
 	return SUCCESS;
 }
+
+ssize_t push_back(struct Vector* self, void* element) {
+	if(!element)
+		return NULL_POINTER_ERROR;
+
+	if(self->size!=self->capacity)
+		self->array[self->size++] = element;
+}
+
