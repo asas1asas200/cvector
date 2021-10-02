@@ -16,20 +16,22 @@ struct Vector{
 ssize_t reserve(struct Vector* self, size_t new_capacity) {
 	void** new_array = malloc(new_capacity * sizeof(void*));
 	self->capacity = new_capacity;
-	if(!self->array) {
-		self->array = new_array;
-		return SUCCESS;
-	}
 
-	for(size_t idx = 0, max_capacity = new_capacity > self->capacity ? new_capacity : self->capacity
-		; idx < max_capacity ; ++idx) {
+	if(!self->array)
+		goto skip_free;
+
+	for(size_t idx = 0, min_capacity = new_capacity < self->capacity ? new_capacity : self->capacity
+		; idx < min_capacity ; ++idx) {
 		if(self->array[idx]) {
 			new_array[idx] = self->array[idx];
 		} else {
 			break;
 		}
 	}
+
 	free(self->array);
+skip_free:
+	self->array = new_array;
 	return SUCCESS;
 }
 
@@ -37,11 +39,21 @@ ssize_t push_back(struct Vector* self, void* element) {
 	if(!element)
 		return NULL_POINTER_ERROR;
 
-	if(self->size!=self->capacity)
-		self->array[self->size++] = element;
+	if(self->size==self->capacity)
+		self->reserve(self, self->capacity<<1);
+	self->array[self->size++] = element;
 }
 
 void* at(struct Vector* self, size_t idx) {
 	return self->array[idx];
+}
+
+void init_vector(struct Vector** v) {
+	*v = malloc(sizeof(struct Vector));
+	(*v)->reserve = reserve;
+	(*v)->push_back = push_back;
+	(*v)->at = at;
+	(*v)->size = 0;
+	(*v)->reserve(*v, 10);
 }
 
