@@ -10,6 +10,7 @@ struct Vector{
 	ssize_t (*push_back)(struct Vector*, void*);
 	ssize_t (*pop_back)(struct Vector*);
 	void* (*at)(struct Vector*, size_t);
+	void (*clear)(struct Vector*);
 };
 
 ssize_t reserve(struct Vector* self, size_t new_capacity) {
@@ -56,12 +57,26 @@ void* at(struct Vector* self, size_t idx) {
 	return self->array[idx];
 }
 
+void clear(struct Vector* self) {
+	if(!self->array)
+		return;
+
+	for(int i=0;i<self->size;++i)
+		free(self->array[i]);
+
+	free(self->array);
+	self->size = 0;
+	self->capacity = 0;
+	self->array = NULL;
+}
+
 void init_vector(struct Vector** v) {
 	*v = malloc(sizeof(struct Vector));
 	(*v)->reserve = reserve;
 	(*v)->push_back = push_back;
 	(*v)->pop_back = pop_back;
 	(*v)->at = at;
+	(*v)->clear = clear;
 	(*v)->size = 0;
 	(*v)->reserve(*v, 2);
 }
