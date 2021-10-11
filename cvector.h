@@ -1,3 +1,6 @@
+#ifndef CVECTOR_H
+#define CVECTOR_H
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "status_code.h"
@@ -81,3 +84,4 @@ void init_vector(struct Vector** v) {
 	(*v)->reserve(*v, 2);
 }
 
+#endif
