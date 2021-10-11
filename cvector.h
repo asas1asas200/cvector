@@ -13,7 +13,7 @@ struct Vector{
 	void (*clear)(struct Vector*);
 };
 
-ssize_t reserve(struct Vector* self, size_t new_capacity) {
+ssize_t _cvector_reserve(struct Vector* self, size_t new_capacity) {
 	void** new_array = malloc(new_capacity * sizeof(void*));
 	self->capacity = new_capacity;
 
@@ -35,7 +35,7 @@ skip_free:
 	return SUCCESS;
 }
 
-ssize_t push_back(struct Vector* self, void* element) {
+ssize_t _cvector_push_back(struct Vector* self, void* element) {
 	if(!element)
 		return NULL_POINTER_ERROR;
 
@@ -44,12 +44,12 @@ ssize_t push_back(struct Vector* self, void* element) {
 	self->array[self->size++] = element;
 }
 
-ssize_t pop_back(struct Vector* self) {
+ssize_t _cvector_pop_back(struct Vector* self) {
 	free(self->array[--self->size]);
 	return SUCCESS;
 }
 
-void* at(struct Vector* self, size_t idx) {
+void* _cvector_at(struct Vector* self, size_t idx) {
 	if(idx>=self->size) {
 		fprintf(stderr, "Index out of bounds.\n");
 		abort();
@@ -57,7 +57,7 @@ void* at(struct Vector* self, size_t idx) {
 	return self->array[idx];
 }
 
-void clear(struct Vector* self) {
+void _cvector_clear(struct Vector* self) {
 	if(!self->array)
 		return;
 
@@ -72,11 +72,11 @@ void clear(struct Vector* self) {
 
 void init_vector(struct Vector** v) {
 	*v = malloc(sizeof(struct Vector));
-	(*v)->reserve = reserve;
-	(*v)->push_back = push_back;
-	(*v)->pop_back = pop_back;
-	(*v)->at = at;
-	(*v)->clear = clear;
+	(*v)->reserve = _cvector_reserve;
+	(*v)->push_back = _cvector_push_back;
+	(*v)->pop_back = _cvector_pop_back;
+	(*v)->at = _cvector_at;
+	(*v)->clear = _cvector_clear;
 	(*v)->size = 0;
 	(*v)->reserve(*v, 2);
 }
